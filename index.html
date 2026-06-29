@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Workplace Readiness</title>
+    
+    <!-- Link Preview Meta Tags -->
+    <meta name="description" content="Eessential English for the workplace. Level A1 - B2">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com/lesson3_module">
+    <meta property="og:title" content="Module Three: Workplace Readiness">
+    <meta property="og:description" content="Master essential English for the work environment. Level A1-B2">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Module Three: Workplace Readiness">
+    <meta property="twitter:description" content="Master essential English for the work environment. Level A1-B2">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        subject: '#3B82F6',    // Blue
+                        verb: '#EF4444',       // Red
+                        object: '#10B981',     // Green
+                        phrase: '#0D9488',     // Teal
+                        connector: '#EAB308',  // Yellow
+                        mainClause: '#4F46E5', // Indigo
+                        subClause: '#9333EA',  // Purple
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            overscroll-behavior: none;
+        }
+        
+        .word-block {
+            cursor: grab;
+            transition: all 0.2s ease;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .word-block:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+
+        .word-block.dragging {
+            opacity: 0.5;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .drop-zone {
+            min-height: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone.drag-over {
+            background-color: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: #EF4444 !important;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .pop-success {
+            animation: pop 0.4s ease-in-out;
+            border-color: #10B981 !important;
+            background-color: #d1fae5 !important;
+        }
+
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .toast {
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #0f766e 100%);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center justify-center">
+
+    <div id="landing-page" class="absolute inset-0 z-50 flex flex-col items-center justify-center gradient-bg text-white px-4">
+        <div class="max-w-md w-full text-center">
+            <!-- Icon / Logo -->
+            <div class="w-32 h-32 mx-auto mb-8 bg-white/10 rounded-3xl p-6 shadow-2xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-20 h-20 text-teal-400">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                </svg>
+            </div>
+            
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Workplace<br><span class="text-teal-400">Readiness</span></h1>
+            <p class="text-slate-200 text-lg mb-10">Module 3: From A1 basics to B2 professional fluency for job placement and the iTEP exam.</p>
+            
+            <button onclick="startGame()" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold text-xl py-4 px-8 rounded-full shadow-[0_0_20px_rgba(20,184,166,0.5)] transition-all transform hover:scale-105 active:scale-95">
+                Start Module
+            </button>
+        </div>
+    </div>
+
+    <div id="game-interface" class="max-w-4xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden hidden w-[95%] md:w-full my-4">
+        
+        <div class="bg-slate-900 p-4 md:p-6 text-white flex items-center justify-between border-b-4 border-teal-500">
+            <button id="prev-btn" onclick="prevLevel()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            </button>
+            
+            <div class="text-center">
+                <h1 class="text-xl font-bold tracking-tight hidden md:block">Module 3: Workplace Readiness</h1>
+                <div class="font-semibold text-teal-400 bg-slate-800 px-4 py-1.5 rounded-full text-sm mt-1 inline-block">
+                    Level <span id="current-level">1</span> of <span id="total-levels">40</span>
+                </div>
+            </div>
+
+            <button id="next-btn" onclick="nextLevel()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </button>
+        </div>
+
+        <div id="dynamic-legend" class="bg-slate-50 border-b border-slate-200 p-3 md:p-4 flex justify-center gap-3 md:gap-4 text-xs md:text-sm font-semibold flex-wrap min-h-[50px]">
+            <!-- Legend items injected by JS so users only see what they need for the current phase -->
+        </div>
+
+        <div class="p-5 md:p-8">
+            
+            <div class="mb-8 text-center bg-teal-50 py-4 px-4 rounded-xl border border-teal-100">
+                <h2 class="text-sm font-bold text-teal-600 uppercase tracking-wider mb-1">Translate to English:</h2>
+                <p id="target-sentence" class="text-xl md:text-3xl font-extrabold text-slate-800">...</p>
+                <p id="level-hint" class="text-xs text-slate-500 mt-2 font-medium"></p>
+            </div>
+
+            <div class="mb-2 flex justify-between items-end">
+                <label class="text-sm font-bold text-slate-400 uppercase tracking-wider">Your Sentence</label>
+                <button id="reset-btn" class="text-xs text-slate-500 hover:text-slate-800 bg-slate-200 px-3 py-1 rounded-md transition-colors" onclick="resetLevel()">Reset</button>
+            </div>
+            
+            <div id="sentence-zone" class="drop-zone w-full min-h-[100px] border-4 border-dashed border-slate-300 rounded-xl p-4 flex flex-wrap content-start gap-2 md:gap-3 bg-slate-50 shadow-inner">
+            </div>
+
+            <div class="mt-8">
+                <label class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 block">Word/Phrase Bank</label>
+                <div id="word-bank" class="drop-zone w-full min-h-[120px] flex flex-wrap gap-2 md:gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script>
+        const levels = [
+            // PHASE 1: A1 Word Level (Office Basics)
+            {
+                turkish: "Ben çalışırım.", targetText: "I work", correctPattern: ["subject", "verb"],
+                hint: "Basic Subject + Verb.",
+                words: [
+                    { id: "w1", text: "I", type: "subject" }, { id: "w2", text: "work", type: "verb" },
+                    { id: "w3", text: "play", type: "verb" }, { id: "w4", text: "He", type: "subject" }
+                ]
+            },
+            {
+                turkish: "O (kadın) yazar.", targetText: "She types", correctPattern: ["subject", "verb"],
+                hint: "Remember the 's' for third-person singular.",
+                words: [
+                    { id: "w1", text: "She", type: "subject" }, { id: "w2", text: "types", type: "verb" },
+                    { id: "w3", text: "I", type: "subject" }, { id: "w4", text: "type", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Biz işe alırız.", targetText: "We hire", correctPattern: ["subject", "verb"],
+                hint: "Recruitment verb.",
+                words: [
+                    { id: "w1", text: "We", type: "subject" }, { id: "w2", text: "hire", type: "verb" },
+                    { id: "w3", text: "They", type: "subject" }, { id: "w4", text: "fire", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Yönetici onaylar.", targetText: "The manager approves", correctPattern: ["subject", "verb"],
+                hint: "Corporate approval.",
+                words: [
+                    { id: "w1", text: "The manager", type: "subject" }, { id: "w2", text: "approves", type: "verb" },
+                    { id: "w3", text: "The client", type: "subject" }, { id: "w4", text: "decline", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Ben e-postaları kontrol ederim.", targetText: "I check the emails", correctPattern: ["subject", "verb", "object"],
+                hint: "S-V-O Structure.",
+                words: [
+                    { id: "w1", text: "I", type: "subject" }, { id: "w2", text: "check", type: "verb" }, { id: "w3", text: "the emails", type: "object" },
+                    { id: "w4", text: "read", type: "verb" }, { id: "w5", text: "the files", type: "object" }
+                ]
+            },
+            {
+                turkish: "Sen belgeyi yazdırırsın.", targetText: "You print the document", correctPattern: ["subject", "verb", "object"],
+                hint: "Office machinery.",
+                words: [
+                    { id: "w1", text: "You", type: "subject" }, { id: "w2", text: "print", type: "verb" }, { id: "w3", text: "the document", type: "object" },
+                    { id: "w4", text: "He", type: "subject" }, { id: "w5", text: "copy", type: "verb" }
+                ]
+            },
+            {
+                turkish: "O (erkek) toplantıyı ayarlar.", targetText: "He schedules the meeting", correctPattern: ["subject", "verb", "object"],
+                hint: "Time management.",
+                words: [
+                    { id: "w1", text: "He", type: "subject" }, { id: "w2", text: "schedules", type: "verb" }, { id: "w3", text: "the meeting", type: "object" },
+                    { id: "w4", text: "She", type: "subject" }, { id: "w5", text: "cancels", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Biz müşteriyi ararız.", targetText: "We call the client", correctPattern: ["subject", "verb", "object"],
+                hint: "Customer service.",
+                words: [
+                    { id: "w1", text: "We", type: "subject" }, { id: "w2", text: "call", type: "verb" }, { id: "w3", text: "the client", type: "object" },
+                    { id: "w4", text: "text", type: "verb" }, { id: "w5", text: "the boss", type: "object" }
+                ]
+            },
+            {
+                turkish: "Onlar raporu sunar.", targetText: "They present the report", correctPattern: ["subject", "verb", "object"],
+                hint: "Boardroom activities.",
+                words: [
+                    { id: "w1", text: "They", type: "subject" }, { id: "w2", text: "present", type: "verb" }, { id: "w3", text: "the report", type: "object" },
+                    { id: "w4", text: "hide", type: "verb" }, { id: "w5", text: "the data", type: "object" }
+                ]
+            },
+            {
+                turkish: "Şirket maaşı öder.", targetText: "The company pays the salary", correctPattern: ["subject", "verb", "object"],
+                hint: "Finance.",
+                words: [
+                    { id: "w1", text: "The company", type: "subject" }, { id: "w2", text: "pays", type: "verb" }, { id: "w3", text: "the salary", type: "object" },
+                    { id: "w4", text: "steals", type: "verb" }, { id: "w5", text: "the tax", type: "object" }
+                ]
+            },
+
+            {
+                turkish: "Ofiste çalışırım.", targetText: "I work in the office", correctPattern: ["subject", "verb", "phrase"],
+                hint: "Add location information.",
+                words: [
+                    { id: "w1", text: "I", type: "subject" }, { id: "w2", text: "work", type: "verb" }, { id: "w3", text: "in the office", type: "phrase" },
+                    { id: "w4", text: "at home", type: "phrase" }, { id: "w5", text: "sleep", type: "verb" }
+                ]
+            },
+            {
+                turkish: "O saat 9'da başlar.", targetText: "He starts at 9 AM", correctPattern: ["subject", "verb", "phrase"],
+                hint: "Time phrase.",
+                words: [
+                    { id: "w1", text: "He", type: "subject" }, { id: "w2", text: "starts", type: "verb" }, { id: "w3", text: "at 9 AM", type: "phrase" },
+                    { id: "w4", text: "on Monday", type: "phrase" }, { id: "w5", text: "ends", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Cuma günü toplantıyı yaparız.", targetText: "We hold the meeting on Friday", correctPattern: ["subject", "verb", "object", "phrase"],
+                hint: "S-V-O + Time Phrase.",
+                words: [
+                    { id: "w1", text: "We", type: "subject" }, { id: "w2", text: "hold", type: "verb" }, { id: "w3", text: "the meeting", type: "object" }, { id: "w4", text: "on Friday", type: "phrase" },
+                    { id: "w5", text: "cancel", type: "verb" }, { id: "w6", text: "in Friday", type: "phrase" }
+                ]
+            },
+            {
+                turkish: "Müşteriler şikayeti çevrimiçi gönderir.", targetText: "Customers submit the complaint online", correctPattern: ["subject", "verb", "object", "phrase"],
+                hint: "Method/Location phrase.",
+                words: [
+                    { id: "w1", text: "Customers", type: "subject" }, { id: "w2", text: "submit", type: "verb" }, { id: "w3", text: "the complaint", type: "object" }, { id: "w4", text: "online", type: "phrase" },
+                    { id: "w5", text: "offline", type: "phrase" }, { id: "w6", text: "ignore", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Ben raporu patron için yazarım.", targetText: "I write the report for the boss", correctPattern: ["subject", "verb", "object", "phrase"],
+                hint: "Beneficiary phrase.",
+                words: [
+                    { id: "w1", text: "I", type: "subject" }, { id: "w2", text: "write", type: "verb" }, { id: "w3", text: "the report", type: "object" }, { id: "w4", text: "for the boss", type: "phrase" },
+                    { id: "w5", text: "to the boss", type: "phrase" }, { id: "w6", text: "read", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Biz paketi dün aldık.", targetText: "We received the package yesterday", correctPattern: ["subject", "verb", "object", "phrase"],
+                hint: "Past tense + time.",
+                words: [
+                    { id: "w1", text: "We", type: "subject" }, { id: "w2", text: "received", type: "verb" }, { id: "w3", text: "the package", type: "object" }, { id: "w4", text: "yesterday", type: "phrase" },
+                    { id: "w5", text: "receive", type: "verb" }, { id: "w6", text: "tomorrow", type: "phrase" }
+                ]
+            },
+            {
+                turkish: "Mülakat sırasında, o sakindi.", targetText: "During the interview, he was calm", correctPattern: ["phrase", "subject", "verb", "object"], // using object class loosely for adjectives here for simplicity
+                hint: "Start with the phrase for emphasis.",
+                words: [
+                    { id: "w1", text: "During the interview,", type: "phrase" }, { id: "w2", text: "he", type: "subject" }, { id: "w3", text: "was", type: "verb" }, { id: "w4", text: "calm", type: "object" },
+                    { id: "w5", text: "After the interview,", type: "phrase" }, { id: "w6", text: "angry", type: "object" }
+                ]
+            },
+            {
+                turkish: "Maaş zammı yüzünden mutluyum.", targetText: "Because of the raise, I am happy", correctPattern: ["phrase", "subject", "verb", "object"],
+                hint: "Reason phrase first.",
+                words: [
+                    { id: "w1", text: "Because of the raise,", type: "phrase" }, { id: "w2", text: "I", type: "subject" }, { id: "w3", text: "am", type: "verb" }, { id: "w4", text: "happy", type: "object" },
+                    { id: "w5", text: "Despite the raise,", type: "phrase" }, { id: "w6", text: "sad", type: "object" }
+                ]
+            },
+            {
+                turkish: "Lütfen belgeyi Cuma gününe kadar imzalayın.", targetText: "Please sign the document by Friday", correctPattern: ["phrase", "verb", "object", "phrase"], // Using phrase for "Please"
+                hint: "Imperative form. Deadlines.",
+                words: [
+                    { id: "w1", text: "Please", type: "phrase" }, { id: "w2", text: "sign", type: "verb" }, { id: "w3", text: "the document", type: "object" }, { id: "w4", text: "by Friday", type: "phrase" },
+                    { id: "w5", text: "in Friday", type: "phrase" }, { id: "w6", text: "burn", type: "verb" }
+                ]
+            },
+            {
+                turkish: "Müdür ofise doğru yürüdü.", targetText: "The manager walked towards the office", correctPattern: ["subject", "verb", "phrase"],
+                hint: "Directional preposition.",
+                words: [
+                    { id: "w1", text: "The manager", type: "subject" }, { id: "w2", text: "walked", type: "verb" }, { id: "w3", text: "towards the office", type: "phrase" },
+                    { id: "w4", text: "ran", type: "verb" }, { id: "w5", text: "away from the office", type: "phrase" }
+                ]
+            },
+
+            {
+                turkish: "E-postayı gönderdik, ama cevap vermediler.", targetText: "We sent the email, but they didn't reply.", correctPattern: ["mainClause", "connector", "mainClause"],
+                hint: "Compound sentence with contrast.",
+                words: [
+                    { id: "w1", text: "We sent the email,", type: "mainClause" }, { id: "w2", text: "but", type: "connector" }, { id: "w3", text: "they didn't reply.", type: "mainClause" },
+                    { id: "w4", text: "so", type: "connector" }, { id: "w5", text: "we called them.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Sözleşme hazır, bu yüzden işe başlayabiliriz.", targetText: "The contract is ready, so we can start working.", correctPattern: ["mainClause", "connector", "mainClause"],
+                hint: "Cause and effect.",
+                words: [
+                    { id: "w1", text: "The contract is ready,", type: "mainClause" }, { id: "w2", text: "so", type: "connector" }, { id: "w3", text: "we can start working.", type: "mainClause" },
+                    { id: "w4", text: "because", type: "connector" }, { id: "w5", text: "we must stop.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Trafik vardı, çünkü bir kaza oldu.", targetText: "There was traffic because there was an accident.", correctPattern: ["mainClause", "connector", "subClause"],
+                hint: "Giving reasons.",
+                words: [
+                    { id: "w1", text: "There was traffic", type: "mainClause" }, { id: "w2", text: "because", type: "connector" }, { id: "w3", text: "there was an accident.", type: "subClause" },
+                    { id: "w4", text: "although", type: "connector" }, { id: "w5", text: "the road was clear.", type: "subClause" }
+                ]
+            },
+            {
+                turkish: "Beni işe alan yönetici şu an tatilde.", targetText: "The manager who hired me is on vacation.", correctPattern: ["mainClause", "connector", "subClause", "mainClause"],
+                hint: "Relative Clause defining the manager.",
+                words: [
+                    { id: "w1", text: "The manager", type: "mainClause" }, { id: "w2", text: "who", type: "connector" }, { id: "w3", text: "hired me", type: "subClause" }, { id: "w4", text: "is on vacation.", type: "mainClause" },
+                    { id: "w5", text: "which", type: "connector" }, { id: "w6", text: "fired me", type: "subClause" }
+                ]
+            },
+            {
+                turkish: "İstediğiniz rapor masanızda.", targetText: "The report that you requested is on your desk.", correctPattern: ["mainClause", "connector", "subClause", "mainClause"],
+                hint: "Relative Clause defining an object.",
+                words: [
+                    { id: "w1", text: "The report", type: "mainClause" }, { id: "w2", text: "that", type: "connector" }, { id: "w3", text: "you requested", type: "subClause" }, { id: "w4", text: "is on your desk.", type: "mainClause" },
+                    { id: "w5", text: "who", type: "connector" }, { id: "w6", text: "is in the trash.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Ürünler hasarlıysa, onları iade edeceğiz.", targetText: "If the products are damaged, we will return them.", correctPattern: ["connector", "subClause", "mainClause"],
+                hint: "First conditional sentence.",
+                words: [
+                    { id: "w1", text: "If", type: "connector" }, { id: "w2", text: "the products are damaged,", type: "subClause" }, { id: "w3", text: "we will return them.", type: "mainClause" },
+                    { id: "w4", text: "Unless", type: "connector" }, { id: "w5", text: "we will sell them.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Bütçe onaylanmasına rağmen, projeyi beklettiler.", targetText: "Even though the budget was approved, they paused the project.", correctPattern: ["connector", "subClause", "mainClause"],
+                hint: "Expressing contrast in a complex sentence.",
+                words: [
+                    { id: "w1", text: "Even though", type: "connector" }, { id: "w2", text: "the budget was approved,", type: "subClause" }, { id: "w3", text: "they paused the project.", type: "mainClause" },
+                    { id: "w4", text: "Because", type: "connector" }, { id: "w5", text: "they started the work.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Toplantı uzun sürdü; ancak verimliydi.", targetText: "The meeting took long; however, it was productive.", correctPattern: ["mainClause", "connector", "mainClause"],
+                hint: "Using a formal transition word.",
+                words: [
+                    { id: "w1", text: "The meeting took long;", type: "mainClause" }, { id: "w2", text: "however,", type: "connector" }, { id: "w3", text: "it was productive.", type: "mainClause" },
+                    { id: "w4", text: "therefore,", type: "connector" }, { id: "w5", text: "it was useless.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Dosyanın nerede olduğunu bilmiyorum.", targetText: "I don't know where the file is.", correctPattern: ["mainClause", "connector", "subClause"],
+                hint: "Noun clause acting as an object.",
+                words: [
+                    { id: "w1", text: "I don't know", type: "mainClause" }, { id: "w2", text: "where", type: "connector" }, { id: "w3", text: "the file is.", type: "subClause" },
+                    { id: "w4", text: "who", type: "connector" }, { id: "w5", text: "is the file.", type: "subClause" } // Distractor word order
+                ]
+            },
+            {
+                turkish: "Yeni stratejinin karımızı artıracağına inanıyoruz.", targetText: "We believe that the new strategy will increase our profit.", correctPattern: ["mainClause", "connector", "subClause"],
+                hint: "Reporting belief/opinion.",
+                words: [
+                    { id: "w1", text: "We believe", type: "mainClause" }, { id: "w2", text: "that", type: "connector" }, { id: "w3", text: "the new strategy will increase our profit.", type: "subClause" },
+                    { id: "w4", text: "We deny", type: "mainClause" }, { id: "w5", text: "which", type: "connector" }
+                ]
+            },
+
+            {
+                turkish: "Tüm adaylarla İK departmanı tarafından mülakat yapılmalıdır.", targetText: "All candidates must be interviewed by the HR department.", correctPattern: ["mainClause", "phrase"],
+                hint: "Passive voice with a modal verb.",
+                words: [
+                    { id: "w1", text: "All candidates must be interviewed", type: "mainClause" }, { id: "w2", text: "by the HR department.", type: "phrase" },
+                    { id: "w3", text: "HR must interview", type: "mainClause" }, { id: "w4", text: "by the candidates.", type: "phrase" }
+                ]
+            },
+            {
+                turkish: "Fatura dün ödendi.", targetText: "The invoice was paid yesterday.", correctPattern: ["mainClause", "phrase"],
+                hint: "Simple past passive.",
+                words: [
+                    { id: "w1", text: "The invoice was paid", type: "mainClause" }, { id: "w2", text: "yesterday.", type: "phrase" },
+                    { id: "w3", text: "They paid", type: "mainClause" }, { id: "w4", text: "tomorrow.", type: "phrase" }
+                ]
+            },
+            {
+                turkish: "Yardıma ihtiyacınız olursa, lütfen BT desteği ile iletişime geçin.", targetText: "Should you need assistance, please contact IT support.", correctPattern: ["subClause", "mainClause"],
+                hint: "Formal conditional inversion (No 'If').",
+                words: [
+                    { id: "w1", text: "Should you need assistance,", type: "subClause" }, { id: "w2", text: "please contact IT support.", type: "mainClause" },
+                    { id: "w3", text: "Will you need help,", type: "subClause" }, { id: "w4", text: "do not contact us.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Toplantı sadece iptal edilmedi, aynı zamanda gelecek aya ertelendi.", targetText: "Not only was the meeting canceled, but it was also postponed to next month.", correctPattern: ["mainClause", "connector", "mainClause"],
+                hint: "Formal emphatic structure.",
+                words: [
+                    { id: "w1", text: "Not only was the meeting canceled,", type: "mainClause" }, { id: "w2", text: "but", type: "connector" }, { id: "w3", text: "it was also postponed to next month.", type: "mainClause" },
+                    { id: "w4", text: "and", type: "connector" }, { id: "w5", text: "it was held.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Proje tamamlandığında, son ödemeyi serbest bırakacağız.", targetText: "Once the project is completed, we will release the final payment.", correctPattern: ["connector", "subClause", "mainClause"],
+                hint: "Time clause referring to the future.",
+                words: [
+                    { id: "w1", text: "Once", type: "connector" }, { id: "w2", text: "the project is completed,", type: "subClause" }, { id: "w3", text: "we will release the final payment.", type: "mainClause" },
+                    { id: "w4", text: "Before", type: "connector" }, { id: "w5", text: "we will cancel it.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Fiyatın çok yüksek olduğu düşünülüyor.", targetText: "It is considered that the price is too high.", correctPattern: ["mainClause", "connector", "subClause"],
+                hint: "Impersonal passive structure.",
+                words: [
+                    { id: "w1", text: "It is considered", type: "mainClause" }, { id: "w2", text: "that", type: "connector" }, { id: "w3", text: "the price is too high.", type: "subClause" },
+                    { id: "w4", text: "We consider", type: "mainClause" }, { id: "w5", text: "if", type: "connector" }
+                ]
+            },
+            {
+                turkish: "Daha fazla bilgi için, ekteki dosyaya bakınız.", targetText: "For further information, please refer to the attached document.", correctPattern: ["phrase", "mainClause"],
+                hint: "Standard email phrasing.",
+                words: [
+                    { id: "w1", text: "For further information,", type: "phrase" }, { id: "w2", text: "please refer to the attached document.", type: "mainClause" },
+                    { id: "w3", text: "Because of info,", type: "phrase" }, { id: "w4", text: "delete the email.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Kararımızı etkileyecek olan rapor hazırlanıyor.", targetText: "The report, which will influence our decision, is being prepared.", correctPattern: ["mainClause", "connector", "subClause", "mainClause"],
+                hint: "Non-defining relative clause in passive voice.",
+                words: [
+                    { id: "w1", text: "The report,", type: "mainClause" }, { id: "w2", text: "which", type: "connector" }, { id: "w3", text: "will influence our decision,", type: "subClause" }, { id: "w4", text: "is being prepared.", type: "mainClause" },
+                    { id: "w5", text: "who", type: "connector" }, { id: "w6", text: "is finished.", type: "mainClause" }
+                ]
+            },
+            {
+                turkish: "Şirketin politikaları çalışanlara açıkça iletilmelidir.", targetText: "The company's policies must be clearly communicated to the employees.", correctPattern: ["mainClause", "phrase"],
+                hint: "Passive with adverbs and prepositional phrase.",
+                words: [
+                    { id: "w1", text: "The company's policies must be clearly communicated", type: "mainClause" }, { id: "w2", text: "to the employees.", type: "phrase" },
+                    { id: "w3", text: "Employees must communicate", type: "mainClause" }, { id: "w4", text: "to the boss.", type: "phrase" }
+                ]
+            },
+            {
+                turkish: "Satışlar düşmediği sürece, işten çıkarma yapmayacağız.", targetText: "Unless sales drop, we will not make any layoffs.", correctPattern: ["connector", "subClause", "mainClause"],
+                hint: "Negative conditional.",
+                words: [
+                    { id: "w1", text: "Unless", type: "connector" }, { id: "w2", text: "sales drop,", type: "subClause" }, { id: "w3", text: "we will not make any layoffs.", type: "mainClause" },
+                    { id: "w4", text: "If", type: "connector" }, { id: "w5", text: "we will hire people.", type: "mainClause" }
+                ]
+            }
+        ];
+
+        // Ensure exactly 40 levels by duplicating some structures with new vocab if needed,
+        // For brevity and robustness in this format, I'll multiply the arrays to reach exactly 40 if needed,
+        // but the prompt asked for a "much longer" module. We currently have 30 highly distinct ones. 
+        // Let's add 10 more to hit the 40 mark specifically for B1/B2 workplace scenarios.
+        
+        levels.push(
+            { turkish: "Ben iş teklifini kabul ederim.", targetText: "I accept the job offer", correctPattern: ["subject", "verb", "object"], hint: "Word level S-V-O.", words: [{id:"w1",text:"I",type:"subject"},{id:"w2",text:"accept",type:"verb"},{id:"w3",text:"the job offer",type:"object"},{id:"w4",text:"decline",type:"verb"}] },
+            { turkish: "Biz sözleşmeyi Pazartesi günü imzaladık.", targetText: "We signed the contract on Monday", correctPattern: ["subject", "verb", "object", "phrase"], hint: "Time marker at the end.", words: [{id:"w1",text:"We",type:"subject"},{id:"w2",text:"signed",type:"verb"},{id:"w3",text:"the contract",type:"object"},{id:"w4",text:"on Monday",type:"phrase"},{id:"w5",text:"read",type:"verb"}] },
+            { turkish: "O (kadın) projeyi çok verimli yönetir.", targetText: "She manages the project very efficiently", correctPattern: ["subject", "verb", "object", "phrase"], hint: "Adverbial phrase at the end.", words: [{id:"w1",text:"She",type:"subject"},{id:"w2",text:"manages",type:"verb"},{id:"w3",text:"the project",type:"object"},{id:"w4",text:"very efficiently",type:"phrase"}] },
+            { turkish: "Patron geldiğinde, çalışıyorduk.", targetText: "When the boss arrived, we were working.", correctPattern: ["connector", "subClause", "mainClause"], hint: "Past continuous interruption.", words: [{id:"w1",text:"When",type:"connector"},{id:"w2",text:"the boss arrived,",type:"subClause"},{id:"w3",text:"we were working.",type:"mainClause"},{id:"w4",text:"If",type:"connector"}] },
+            { turkish: "Sistem şu anda güncelleniyor.", targetText: "The system is being updated right now.", correctPattern: ["mainClause", "phrase"], hint: "Present continuous passive.", words: [{id:"w1",text:"The system is being updated",type:"mainClause"},{id:"w2",text:"right now.",type:"phrase"},{id:"w3",text:"The system updates",type:"mainClause"}] },
+            { turkish: "Özgeçmişini gönderen adaylar değerlendirilecektir.", targetText: "Candidates who submitted their resumes will be evaluated.", correctPattern: ["mainClause", "connector", "subClause", "mainClause"], hint: "Relative clause + passive voice.", words: [{id:"w1",text:"Candidates",type:"mainClause"},{id:"w2",text:"who",type:"connector"},{id:"w3",text:"submitted their resumes",type:"subClause"},{id:"w4",text:"will be evaluated.",type:"mainClause"}] },
+            { turkish: "Açıkçası, bu hedefe ulaşmak zor olacak.", targetText: "Frankly, achieving this goal will be difficult.", correctPattern: ["phrase", "mainClause"], hint: "Sentence adverb/phrase.", words: [{id:"w1",text:"Frankly,",type:"phrase"},{id:"w2",text:"achieving this goal will be difficult.",type:"mainClause"}] },
+            { turkish: "Sorularınız olursa bana bildirin.", targetText: "Let me know if you have any questions.", correctPattern: ["mainClause", "connector", "subClause"], hint: "Common email sign-off.", words: [{id:"w1",text:"Let me know",type:"mainClause"},{id:"w2",text:"if",type:"connector"},{id:"w3",text:"you have any questions.",type:"subClause"},{id:"w4",text:"that",type:"connector"}] },
+            { turkish: "Talebe rağmen, üretimi artırmadılar.", targetText: "In spite of the demand, they didn't increase production.", correctPattern: ["phrase", "mainClause"], hint: "Prepositional phrase for contrast.", words: [{id:"w1",text:"In spite of the demand,",type:"phrase"},{id:"w2",text:"they didn't increase production.",type:"mainClause"},{id:"w3",text:"Because of the demand,",type:"phrase"}] },
+            { turkish: "Eğer istifa ederse, yerine kim geçecek?", targetText: "If he resigns, who will replace him?", correctPattern: ["connector", "subClause", "mainClause"], hint: "Conditional question.", words: [{id:"w1",text:"If",type:"connector"},{id:"w2",text:"he resigns,",type:"subClause"},{id:"w3",text:"who will replace him?",type:"mainClause"},{id:"w4",text:"Unless",type:"connector"}] }
+        );
+
+        let currentLevelIndex = 0;
+        document.getElementById('total-levels').innerText = levels.length;
+        
+        const sentenceZone = document.getElementById('sentence-zone');
+        const wordBank = document.getElementById('word-bank');
+        
+        const grammarTypes = {
+            subject: { label: 'Person/Doer (Kim?)', style: 'bg-blue-500 border-blue-700 text-white' },
+            verb: { label: 'Action (Ne yapar?)', style: 'bg-red-500 border-red-700 text-white' },
+            object: { label: 'Receiver (Neyi/Kimi?)', style: 'bg-emerald-500 border-emerald-700 text-white' },
+            phrase: { label: 'Time/Place/Detail', style: 'bg-teal-600 border-teal-800 text-white' },
+            connector: { label: 'Connector (Bağlaç)', style: 'bg-yellow-400 border-yellow-600 text-slate-900' },
+            mainClause: { label: 'Main Sentence (Ana Cümle)', style: 'bg-indigo-600 border-indigo-800 text-white' },
+            subClause: { label: 'Dependent Sentence (Yan Cümle)', style: 'bg-purple-600 border-purple-800 text-white' }
+        };
+
+        function startGame() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('game-interface').classList.remove('hidden');
+            renderLevel(currentLevelIndex);
+        }
+
+        function renderLegend(levelWords) {
+            const legendContainer = document.getElementById('dynamic-legend');
+            legendContainer.innerHTML = '';
+            
+            // Extract unique types required for this level
+            const uniqueTypes = [...new Set(levelWords.map(w => w.type))];
+            
+            uniqueTypes.forEach(type => {
+                const info = grammarTypes[type];
+                if(info) {
+                    const el = document.createElement('div');
+                    el.className = 'flex items-center gap-1.5 transition-all';
+                    
+                    // Create color dot based on the tailwind bg class in the style string
+                    const bgClass = info.style.split(' ')[0];
+                    
+                    el.innerHTML = `
+                        <div class="w-3 h-3 rounded-full ${bgClass} shadow-sm border border-black/10"></div> 
+                        <span class="text-slate-700">${info.label}</span>
+                    `;
+                    legendContainer.appendChild(el);
+                }
+            });
+        }
+
+        function renderLevel(index) {
+            const level = levels[index];
+            document.getElementById('current-level').innerText = index + 1;
+            document.getElementById('target-sentence').innerText = level.turkish;
+            document.getElementById('level-hint').innerText = `💡 Hint: ${level.hint}`;
+            
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === levels.length - 1;
+
+            renderLegend(level.words);
+
+            sentenceZone.innerHTML = '';
+            wordBank.innerHTML = '';
+            sentenceZone.className = "drop-zone w-full min-h-[100px] border-4 border-dashed border-slate-300 rounded-xl p-4 flex flex-wrap content-start gap-2 md:gap-3 bg-slate-50 shadow-inner";
+
+            let shuffledWords = [...level.words].sort(() => Math.random() - 0.5);
+            
+            shuffledWords.forEach(word => {
+                const block = document.createElement('div');
+                block.id = word.id;
+                block.dataset.type = word.type;
+                block.innerText = word.text;
+                
+                const styleClasses = grammarTypes[word.type].style;
+                block.className = `word-block px-3 py-2 md:px-4 md:py-3 rounded-xl border-b-4 font-semibold text-sm md:text-base shadow-sm hover:brightness-110 ${styleClasses}`;
+                
+                block.draggable = true;
+                block.addEventListener('dragstart', handleDragStart);
+                block.addEventListener('dragend', handleDragEnd);
+                block.addEventListener('click', handleBlockClick);
+
+                wordBank.appendChild(block);
+            });
+        }
+
+        let draggedElement = null;
+
+        function handleDragStart(e) {
+            if (!this.draggable) return;
+            draggedElement = this;
+            setTimeout(() => this.classList.add('dragging'), 0);
+            e.dataTransfer.setData('text/plain', this.id);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            this.classList.remove('dragging');
+            draggedElement = null;
+        }
+
+        const dropZones = [sentenceZone, wordBank];
+        
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                
+                const id = e.dataTransfer.getData('text/plain');
+                const draggable = document.getElementById(id);
+                
+                if (draggable && draggable.draggable) {
+                    zone.appendChild(draggable);
+                    checkSentence();
+                }
+            });
+        });
+
+        function handleBlockClick(e) {
+            const block = e.target;
+            if (!block.draggable) return;
+
+            if (block.parentElement.id === 'word-bank') {
+                sentenceZone.appendChild(block);
+            } else if (block.parentElement.id === 'sentence-zone') {
+                wordBank.appendChild(block);
+            }
+            checkSentence();
+        }
+
+        function checkSentence() {
+            const level = levels[currentLevelIndex];
+            const placedBlocks = Array.from(sentenceZone.children);
+            
+            if (placedBlocks.length < level.correctPattern.length) {
+                sentenceZone.classList.remove('pop-success', 'border-emerald-500');
+                return; 
+            }
+
+            const userText = placedBlocks.map(block => block.innerText).join(' ').trim();
+            const userPattern = placedBlocks.map(block => block.dataset.type).join(',');
+            
+            // 1. Exact Match
+            if (userText === level.targetText.trim()) {
+                handleSuccess();
+                return;
+            }
+
+            // 2. Turklish Trapdoor (Word Level)
+            if (userPattern.includes("subject,object,verb")) {
+                showToast("🇹🇷 Turklish Detected! English uses Subject-Verb-Object.", "error");
+                handleError();
+                return;
+            }
+
+            // 3. Run-on Trapdoor (Chunk Level)
+            if (userPattern.includes("mainClause,mainClause")) {
+                showToast("Run-on Sentence! Connect two main clauses with a Yellow connector.", "error");
+                handleError();
+                return;
+            }
+
+            // 4. Fragment Trapdoor
+            const hasMainOrSubjVerb = userPattern.includes("mainClause") || (userPattern.includes("subject") && userPattern.includes("verb"));
+            if (!hasMainOrSubjVerb && placedBlocks.length >= level.correctPattern.length) {
+                showToast("Fragment Error! A sentence needs a main clause or subject+verb.", "error");
+                handleError();
+                return;
+            }
+
+            // 5. General structural error
+            if (placedBlocks.length >= level.correctPattern.length) {
+                showToast("Not quite right. Look at the colors and the hint!", "error");
+                handleError();
+            }
+        }
+
+        function handleSuccess() {
+            sentenceZone.classList.add('pop-success');
+            showToast("Excellent! 🎉", "success");
+            
+            Array.from(sentenceZone.children).forEach(block => {
+                block.draggable = false;
+                block.classList.remove('cursor-grab', 'hover:brightness-110');
+                block.classList.add('cursor-default', 'opacity-90');
+            });
+
+            setTimeout(() => {
+                if (currentLevelIndex < levels.length - 1) {
+                    nextLevel();
+                } else {
+                    sentenceZone.innerHTML = `<div class="w-full text-center py-6 text-teal-600 font-extrabold text-2xl">🏆 Congratulations! You have mastered Module 3!</div>`;
+                    document.getElementById('word-bank').innerHTML = '';
+                    document.getElementById('level-hint').innerText = "Ready for the iTEP Exam!";
+                }
+            }, 1800);
+        }
+
+        function handleError() {
+            sentenceZone.classList.add('shake');
+            setTimeout(() => {
+                sentenceZone.classList.remove('shake');
+            }, 400);
+        }
+
+        function nextLevel() {
+            if (currentLevelIndex < levels.length - 1) {
+                currentLevelIndex++;
+                renderLevel(currentLevelIndex);
+            }
+        }
+
+        function prevLevel() {
+            if (currentLevelIndex > 0) {
+                currentLevelIndex--;
+                renderLevel(currentLevelIndex);
+            }
+        }
+
+        function resetLevel() {
+            renderLevel(currentLevelIndex);
+        }
+
+        function showToast(message, type) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const bgClass = type === 'success' ? 'bg-teal-600' : 'bg-rose-500';
+            toast.className = `toast ${bgClass} flex items-center gap-3`;
+            
+            const icon = type === 'success' 
+                ? `<svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`
+                : `<svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            
+            toast.innerHTML = `${icon} <span class="text-sm md:text-base">${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
